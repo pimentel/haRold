@@ -1,0 +1,11 @@
+Package: haRold
+Title: Harold Pimentel's basic functions
+Version: 0.1
+Authors: Harold Pimentel <haroldpimentel@gmail.com>
+Description: Miscellaneous functions I use regularly.
+Depends:
+    R (>= 3.0.0),
+    ggplot2
+License: MIT
+URL: https://github.com/pimentel/haRold
+LazyData: true
