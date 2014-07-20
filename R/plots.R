@@ -15,6 +15,7 @@
 #'
 #' head(USArrests)
 #' pcaPlot(USArrests)
+#' pcaPlot(USArrests[,c('Murder', 'Assault', 'Rape')])
 #' pcaPlot(USArrests, c('crime', 'crime', 'pop', 'crime'))
 #' pcaPlot(USArrests, c('crime', 'crime', 'pop', 'crime'), F)
 pcaPlot <- function(df, groups = NULL, useColLabels = TRUE,
@@ -45,7 +46,7 @@ pcaPlot <- function(df, groups = NULL, useColLabels = TRUE,
         plt <- ggplot(df, aes(PC1, PC2, label = lab)) 
     }
 
-    if (useRowLabels)
+    if (useColLabels)
         plt + geom_text()
     else
         plt + geom_point()

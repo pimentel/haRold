@@ -28,6 +28,7 @@ require(graphics)
 
 head(USArrests)
 pcaPlot(USArrests)
+pcaPlot(USArrests[,c('Murder', 'Assault', 'Rape')])
 pcaPlot(USArrests, c('crime', 'crime', 'pop', 'crime'))
 pcaPlot(USArrests, c('crime', 'crime', 'pop', 'crime'), F)
 }
