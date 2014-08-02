@@ -51,3 +51,34 @@ pcaPlot <- function(df, groups = NULL, useColLabels = TRUE,
     else
         plt + geom_point()
 }
+
+#' Conditional boxplots
+#'
+#' Plot boxplots of y conditional on the quantile of x
+#'
+#' @param df a data.frame with variables of interest
+#' @param y string representing the column name in df
+#' @param x string representing the column to condition on
+#' @param binSize how much spacing in the quantiles to include
+#' @param yQuantile if TRUE, also plot y's quantiles
+#' @return a ggplot object
+#' @export
+conditionalBoxplots <- function(df, y, x, binSize = 0.05, yQuantile = FALSE)
+{
+    df$xQuant <- ecdf(df[,x])(df[,x])
+    df$xGroup <- cut(df$xQuant, seq(0, 1, by = binSize))
+    yTitle <- y
+    if (yQuantile)
+    {
+        df$yQuant <- ecdf(df[,y])(df[,y])
+        df$yGroup <- cut(df$yQuant, seq(0, 1, by = binSize))
+        yTitle <- paste0(yTitle, ' quantile')
+        y <- 'yGroup'
+    }
+    plt <- ggplot(df, aes_string('xGroup', y, group = 'xGroup', fill = 'xGroup'))
+    plt <- plt +  geom_boxplot()
+    plt <- plt + xlab(paste0(x,' quantile'))
+    plt <- plt + ylab(yTitle)
+    plt <- plt + guides(fill=guide_legend(title="quantile"))
+    plt
+}
