@@ -61,19 +61,26 @@ pcaPlot <- function(df, groups = NULL, useColLabels = TRUE,
 #' @param x string representing the column to condition on
 #' @param binSize how much spacing in the quantiles to include
 #' @param yQuantile if TRUE, also plot y's quantiles
+#' @param xQuantile if TRUE, plot x's quantiles
 #' @return a ggplot object
 #' @export
-conditionalBoxplots <- function(df, y, x, binSize = 0.05, yQuantile = FALSE)
+conditionalBoxplots <- function(df, y, x, binSize = 0.05, yQuantile = FALSE, xQuantile = TRUE)
 {
-    df$xQuant <- ecdf(df[,x])(df[,x])
-    df$xGroup <- cut(df$xQuant, seq(0, 1, by = binSize))
+    if (xQuantile)
+    {
+        df$xQuant <- ecdf(df[,x])(df[,x])
+        df$xGroup <- cut(df$xQuant, seq(0, 1, by = binSize))
+    }
+    else
+    {
+        df$xGroup <- cut(df[,x], seq(0, 1, by = binSize))
+    }
     yTitle <- y
     if (yQuantile)
     {
         df$yQuant <- ecdf(df[,y])(df[,y])
-        df$yGroup <- cut(df$yQuant, seq(0, 1, by = binSize))
         yTitle <- paste0(yTitle, ' quantile')
-        y <- 'yGroup'
+        y <- 'yQuant'
     }
     plt <- ggplot(df, aes_string('xGroup', y, group = 'xGroup', fill = 'xGroup'))
     plt <- plt +  geom_boxplot()
