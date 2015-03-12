@@ -2,5 +2,6 @@
 
 export(adjacentPairs)
 export(conditionalBoxplots)
+export(ldaPlot)
 export(outer_join)
 export(pcaPlot)

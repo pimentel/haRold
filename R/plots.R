@@ -52,6 +52,44 @@ pcaPlot <- function(df, groups = NULL, useColLabels = TRUE,
         plt + geom_point()
 }
 
+
+#' LDA plot
+#'
+#' Create a two-dimensional LDA plot using all variables in \code{data} to
+#' predict \code{groups}
+#'
+#' @param data a matrix with samples on columns and dimensions on rows
+#' @param groups the class of each column
+#' @param useColLabels if \code{TRUE} print the column labels on the plot
+#' @return a \code{ggplot} object
+#' @export
+ldaPlot <- function(data, groups, useColLabels = TRUE) {
+    if (class(data) != "matrix") {
+        data <- as.matrix(data)
+        if (class(data) != "matrix")
+            stop("Error: ldaPlot requires a matrix")
+    }
+
+    if (length(groups) != ncol(data))
+        stop("Error: length(groups) != ncol(data)")
+
+    cat("Computing LDA\n")
+    lda_res <- MASS::lda(t(data), groups)
+    proj <- t(t(lda_res$scaling) %*% data)
+    proj <- as.data.frame(proj)
+
+    proj$groups <- as.factor(groups)
+    proj$lab <- colnames(data)
+
+    cat("Making plot\n")
+    plt <- ggplot(proj, aes(LD1, LD2, colour = groups, label = lab))
+
+    if (useColLabels)
+        plt + geom_text()
+    else
+        plt + geom_point()
+}
+
 #' Conditional boxplots
 #'
 #' Plot boxplots of y conditional on the quantile of x
